@@ -28,19 +28,21 @@
 ## CRITÉRIOS DE VALIDAÇÃO DO XML CNES
 
    1. Formato do Arquivo:
-    ● O arquivo deve estar no formato padrão '.xml' ou '.zip', contendo o XML compactado.
-
+      - O arquivo deve estar no formato padrão '.xml' ou '.zip', contendo o XML compactado.
    2. Data do XML:
-    ● A data do XML deve corresponder à semana vigente.
-
+      - A data do XML deve corresponder à semana vigente.
+        
    3. Registro no Banco de Dados:
-    ● O XML não deve possuir registro no banco de dados. No entanto, caso exista, serão verificadas as flags de importação para as plataformas receptoras (AtendSaúde e eSUS AB). Se uma destas flags estiver com valor falso, o XML será considerado novamente para processamento apenas das unidades ou plataformas faltantes.
+      - O XML não deve possuir registro no banco de dados. No entanto, caso exista, serão verificadas as flags de importação para as plataformas receptoras (AtendSaúde e eSUS AB). Se uma destas flags estiver com valor falso, o XML será considerado novamente para processamento apenas das unidades ou plataformas faltantes, seguindo os demais critérios.
 
    4. Código do IBGE:
-    ● O código do IBGE presente no arquivo '.xml' deve ser idêntico ao código IBGE do município destinatário do conteúdo.
+      - O código do IBGE presente no arquivo '.xml' deve ser idêntico ao código IBGE do município destinatário do conteúdo.
 
    5. Prioridade de XMLs para o Mesmo Município:
-    ● Se houver mais de um XML do mesmo município com data válida para inserção, será considerado apenas o XML com a data mais próxima ou igual à data atual do processamento.
+      - Se houver mais de um XML do mesmo município com data válida para inserção, será considerado apenas o XML com a data mais próxima ou igual à data atual do processamento.
 
    6. Avaliação de Prioridade para XMLs: Desconsideração em Caso de Dados Mais Atualizado:
-    ● Se existir um registro no banco de dados de um XML com data superior àquela selecionada para processamento, o selecionado será desconsiderado, visto que já houve a importação de um dado mais atualizado.
+      - Se existir um registro no banco de dados de um XML com data superior àquela selecionada para processamento, o selecionado será desconsiderado, visto que já houve a importação de um dado mais atualizado.
+ 
+
+
