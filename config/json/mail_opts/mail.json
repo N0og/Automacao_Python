@@ -1,0 +1,11 @@
+{
+    "HEADER":{
+        "name": "NOME APRESENTADO COMO REMENTENTE."
+        ,
+        "subject": "ASSUNTO DO E-MAIL."
+    },
+    "EMAILS":{
+        "NOME DA CHAVE DO E-MAIL": "seuenderecodeemail@email.com",
+        "Ex: E-mail Suporte": "suporte@email.com.br"
+    }
+}
