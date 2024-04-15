@@ -206,25 +206,28 @@ class eSUSBOT:
             loading_div = self._longWait.until(EC.presence_of_element_located((By.CLASS_NAME, 'css-zbf35q')))
             progress = self._longWait.until(EC.presence_of_element_located((By.CLASS_NAME, 'css-1ip3lkc')))
             finish_progress = self._debbugWait.until(EC.presence_of_element_located((By.CLASS_NAME, 'css-a9z75u')))
-            self.goto('importarCnes')
-            self.check_backdrop()
-            result = self.wait_result()                  
-        
-            if result:
-                LOG_GERAL.info("ULTIMA ATUALIZAÇÃO DE IMPORTAÇÃO PRESENTE EM SISTEMA:")
-            
-                if result[2].lower() == 'falha':
-                    LOG_GERAL.warning(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
-                    LOG_GERAL.warning("Importação mal sucedida!")
-
-                else:
-                    LOG_GERAL.info(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
-                    LOG_GERAL.info("Importação bem sucedida!")
+            if self.goto('importarCnes'):
+              self.check_backdrop()
+              result = self.wait_result()                  
+          
+              if result:
+                  LOG_GERAL.info("ULTIMA ATUALIZAÇÃO DE IMPORTAÇÃO PRESENTE EM SISTEMA:")
+              
+                  if result[2].lower() == 'falha':
+                      LOG_GERAL.warning(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
+                      LOG_GERAL.warning("Importação mal sucedida!")
+  
+                  else:
+                      LOG_GERAL.info(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
+                      LOG_GERAL.info("Importação bem sucedida!")
+              else:
+                  LOG_GERAL.error("Sem resultado de Importação. | Possível falha de importação.")
+  
+              self.interrupt_driver()
+              return True
             else:
-                LOG_GERAL.error("Sem resultado de Importação. | Possível falha de importação.")
-
-            self.interrupt_driver()
-            return True
+                self.interrupt_driver()
+                raise DriverInterrupted("Erro ao aguardar tabela Resultado de Importação | Possível falha de importação.")
         except TimeoutException:
             self.interrupt_driver()
             raise DriverInterrupted("Erro ao aguardar tabela Resultado de Importação | Possível falha de importação.")
