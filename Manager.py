@@ -142,8 +142,8 @@ class Manager:
                                 LOG_GERAL.error(f'{e} - {municipio} - {unidade} - {ip}')
                                 LOG_ERROR.error(f'{e} - {municipio} - {unidade} - {ip}')
                                 continue
-                    
-                        if self.__check_esus_sucess == len(dados["IPS"]):
+                 
+                        if self.__check_esus_sucess(xml._id) == len(dados["IPS"]):
                             xml._esus_imported = True
                             self.__register_bd_lote(municipio, xml)
 
@@ -212,7 +212,7 @@ class Manager:
         else:
             return None
     
-    def __check_esus_sucess(self):
+    def __check_esus_sucess(self, id):
         sucess = LOCAL_STORAGE._cursor.execute('''select * from lotes_importados_esus where xml_reference = ? and imported = 1''', (id,)).fetchall()
         if sucess:
             return len(sucess)

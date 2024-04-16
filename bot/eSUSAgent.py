@@ -8,6 +8,7 @@ from time import sleep
 from datetime import datetime
 from const import LOG_GERAL
 from navigator import *
+from unidecode import unidecode
 
 TEMPO_RESPOSTAS = {"short":3,
                    "mid": 6,
@@ -132,12 +133,11 @@ class eSUSBOT:
             login_button = self.driver.find_element(By.CLASS_NAME, value='css-1mc6ylg')
             login_button.click() 
 
-            try:
+            try:  
                 self._shortWait.until(
-                    EC.presence_of_element_located((By.CLASS_NAME, 'css-1prlhy')))
+                    EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div[4]/div[1]/div/div[2]/div[1]/div')))
                 return False
-            
-            except TimeoutException as e:
+            except TimeoutException:        
                 LOG_GERAL.info("Login Efetuado.")
                 try:
                     self._longWait.until(
@@ -161,7 +161,7 @@ class eSUSBOT:
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.css-wstido div[data-cy="Acesso.card"]')))
 
             for perfil in perfis:
-                nomeDoPerfil = perfil.accessible_name.lower()
+                nomeDoPerfil = unidecode(perfil.accessible_name.lower())
                 if municipio.lower() in nomeDoPerfil and profile.lower() in nomeDoPerfil:
                     perfil.click()
                     LOG_GERAL.info(f"Acesso ao perfil {self._municipio} | 'Administrador Municipal' efetuado.")
@@ -207,24 +207,24 @@ class eSUSBOT:
             progress = self._longWait.until(EC.presence_of_element_located((By.CLASS_NAME, 'css-1ip3lkc')))
             finish_progress = self._debbugWait.until(EC.presence_of_element_located((By.CLASS_NAME, 'css-a9z75u')))
             if self.goto('importarCnes'):
-              self.check_backdrop()
-              result = self.wait_result()                  
-          
-              if result:
-                  LOG_GERAL.info("ULTIMA ATUALIZAÇÃO DE IMPORTAÇÃO PRESENTE EM SISTEMA:")
-              
-                  if result[2].lower() == 'falha':
-                      LOG_GERAL.warning(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
-                      LOG_GERAL.warning("Importação mal sucedida!")
-  
-                  else:
-                      LOG_GERAL.info(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
-                      LOG_GERAL.info("Importação bem sucedida!")
-              else:
-                  LOG_GERAL.error("Sem resultado de Importação. | Possível falha de importação.")
-  
-              self.interrupt_driver()
-              return True
+                self.check_backdrop()
+                result = self.wait_result()                  
+            
+                if result:
+                    LOG_GERAL.info("ULTIMA ATUALIZAÇÃO DE IMPORTAÇÃO PRESENTE EM SISTEMA:")
+                
+                    if result[2].lower() == 'falha':
+                        LOG_GERAL.warning(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
+                        LOG_GERAL.warning("Importação mal sucedida!")
+
+                    else:
+                        LOG_GERAL.info(f"DATA: {result[0]}, SITUAÇÃO: {result[2]}, EQUIPES: {result[3]}, PROFISSIONAIS: {result[4]}, LOTAÇÕES: {result[5]}")
+                        LOG_GERAL.info("Importação bem sucedida!")
+                else:
+                    LOG_GERAL.error("Sem resultado de Importação. | Possível falha de importação.")
+
+                self.interrupt_driver()
+                return True
             else:
                 self.interrupt_driver()
                 raise DriverInterrupted("Erro ao aguardar tabela Resultado de Importação | Possível falha de importação.")
